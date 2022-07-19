@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{%  block start %}
+
+<div class="container pt-2">
+    <div class="row search-card-result">
+                           
+            <div class="col-md-3">
+                <img class="img-fluid" src="{{hotels_obj.image_one.url}}">
+            </div>
+   
+        <div class="col-md-5">
+            <h5>{{hotels_obj.hotel_name}}</h5>
+            
+            <p>
+                {{hotels_obj.description|truncatechars:150}}
+            </p>
+            <p>
+                {%for amenitie in hotels_obj.amenities.all %}
+                <b>{{amenitie.amenity_name}}</b>,
+                {% endfor %}
+            </p>
+            
+        </div>
+        <div class="col-md-2 border-left text-center more-offers">
+            
+            <p><strong>Place.com</strong></p>
+            <p><strong>Rs{{hotels_obj.hotel_price}}</strong></p>
+            <p><strong>Room count</strong></p>
+            <p><strong>{{hotels_obj.room_count}}</strong></p>
+        </div>
+    </div>
+        <div class="row search-card-result">
+            <img class="col-md-4 img-fluid" src="{{hotels_obj.image_one.url}}" >
+            <img class="col-md-4 img-fluid" src="{{hotels_obj.image_two.url}}" >
+            <img class="col-md-4 img-fluid" src="{{hotels_obj.image_three.url}}">
+        </div>
+    {% if request.user.is_authenticated %}
+    <div class="filter-card"><br>
+        <h4><strong>Book Hotel</strong></h4>
+        {%include "messages.html"%}
+        <form method="post">
+            {% csrf_token %}
+            <div class="row form-group">
+                <div class="col-md-4">
+                    <label for="mintopay">Check in</label>
+                    <p>
+                        <input type="date" name="checkin" id="checkin" class="form-control">
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <label for="maxtopay">Check out</label>
+                    <p>
+                        <input type="date" name="checkout" id="checkout" class="form-control">
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <label>No of rooms</label>
+                    <p>
+                        <input type="number" name="rooms" id="rooms" class="form-control" min="1" max={{hotels_obj.room_count}}>
+                    </p>
+                </div>
+            </div>
+           
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <input type="submit" class="btn btn-primary btn-block" value="Book">
+                </div>
+            </div>
+        </form>
+    </div>
+    {% else %}
+
+    <a href="/login/" class="btn btn-success mt-5 ">Login</a>
+    {% endif %}
+</div>
+
+{% endblock %}

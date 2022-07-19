@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{%  block start %}
+
+<div class="search-container mb-2 pb-5">
+            <div class="col-lg-12  px-4 mb-5">
+                <form>
+                <div class="row">
+                    <div class="col-md-4">
+                    <div class="form-inline">
+                        <label class="" for="exampleFormControlSelect1">Sort by price</label>
+                        <select class="form-control" name="sort_by" id="exampleFormControlSelect1">
+                            <option value="">Recommended</option>
+                            <option {% if sort_by == 'ASC' %} selected {%endif %} value="ASC">Low to high</option>
+                            <option {% if sort_by == 'DSC' %} selected {%endif %} value="DSC">High to low</option>
+                           
+                        </select>
+                    </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-inline">
+                            <label class="" for="exampleFormControlSelect1">Search</label>
+                            <input type="text" name="search" class="form-control" value=" " placeholder="Search.."> 
+                        </div>
+
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-inline">
+                           <label class="" for="exampleFormControlSelect1">Amenities</label>
+                            <select name="amenities" class="form-control" multiple>
+                            <option value="">Choose</option>
+                                {% for amenities_obj in amenities_objs %}
+                            <option {% if amenities_obj.amenity_name in amenities %} selected {% endif %}value="{{amenities_obj.amenity_name}}">{{amenities_obj.amenity_name}}</option>
+                                {% endfor %}
+                        </select>
+                        </div> 
+
+                    </div>
+                    <div class="col-md-4">
+                     
+                            <button style="margin-top: 30px;" type="submit" class="btn btn-success">Find</button>
+                        </div>
+                </div>
+                </form>
+                
+                {% for hotels_obj in hotels_objs %}
+                <div class="row search-card-result">
+                    <div class="col-md-3">
+                        <img class="img-fluid" src="{{hotels_obj.image_one.url}}">
+                    </div>               
+                    <div class="col-md-5">
+                        <a href="/hotel-detail/{{hotels_obj.uid}}">
+                        <h5>{{hotels_obj.hotel_name}}</h5></a>
+                        
+                        <p>
+                            {{hotels_obj.description|truncatechars:150}}
+                        </p>
+                        <p>
+                            {%for amenitie in hotels_obj.amenities.all %}
+                            <b>{{amenitie.amenity_name}}</b>,
+                            {% endfor %}
+                        </p>
+                        
+                    </div>
+                    <div class="col-md-2 border-left text-center more-offers">
+                        
+                        <p>Place.com</p>
+                        <p>Rs{{hotels_obj.hotel_price}}</p>
+                        <p>Room count</p>
+                        <p>{{hotels_obj.room_count}}</p>
+                    </div>
+                </div>
+                {% endfor %}
+               
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
